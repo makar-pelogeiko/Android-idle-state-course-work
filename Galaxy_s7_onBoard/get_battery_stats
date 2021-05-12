@@ -1,0 +1,40 @@
+#!/bin/bash
+countCpu=0
+countIdle=0
+flagIdle=0
+flagCpu=0
+echo ----------- IDLE TIME---------------------------
+while (( $flagCpu == 0 ))
+    do
+    while (( $flagIdle == 0 ))
+        do
+			cd /sys/devices/system/cpu/cpu$countCpu/cpuidle/state$countIdle 2> /dev/null
+			if (( $? != 0 ))
+			then
+				flagIdle=1
+			else
+				echo cpu $countCpu, state $countIdle
+				echo name $(cat name)                
+				echo desc $(cat desc)
+				echo disable $(cat disable)
+				echo latency $(cat latency)
+				echo power $(cat power)
+				echo residency $(cat residency)
+				echo usage $(cat usage) 
+				echo time $(cat time)
+				echo --------------------------------------
+				countIdle=$(( $countIdle + 1 ))
+			fi
+        done
+    countCpu=$(( $countCpu + 1 ))
+    countIdle=0
+	flagIdle=0
+	cd /sys/devices/system/cpu/cpu$countCpu/cpuidle/state$countIdle 2> /dev/null
+	if (( $? != 0 ))
+	then
+		flagCpu=1
+	else
+		echo --------- CPU $countCpu -----------------------
+	fi
+	done
+	echo ------------ IDLE TIME --------------------------
