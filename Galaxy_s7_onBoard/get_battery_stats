@@ -13,15 +13,23 @@ while (( $flagCpu == 0 ))
 			then
 				flagIdle=1
 			else
-				echo cpu $countCpu, state $countIdle
-				echo name $(cat name)                
-				echo desc $(cat desc)
-				echo disable $(cat disable)
-				echo latency $(cat latency)
-				echo power $(cat power)
-				echo residency $(cat residency)
-				echo usage $(cat usage) 
-				echo time $(cat time)
+				echo cpu $countCpu state $countIdle
+#				echo name $(cat name)                
+#				echo desc $(cat desc)
+#				echo disable $(cat disable)
+#				echo latency $(cat latency)
+#				echo power $(cat power)
+#				echo residency $(cat residency)
+#				echo usage $(cat usage) 
+#				echo time $(cat time)
+				cat name                
+				cat desc
+				cat disable
+				cat latency
+				cat power
+				cat residency
+				cat usage 
+				cat time
 				echo --------------------------------------
 				countIdle=$(( $countIdle + 1 ))
 			fi
