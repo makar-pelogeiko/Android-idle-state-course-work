@@ -17,6 +17,7 @@ adb shell input swipe 550 2263 550 300 500
 ::prepare to experiment
 adb shell dumpsys batterystats --reset
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\reading\%~1read_before.txt
+echo %TIME% > Tests\Results\reading\%~1read_time.txt
 :: open pdf file to read 
 adb shell "input tap 670 236" && timeout 4
 :: reading is emulated
@@ -24,6 +25,7 @@ call:readerFunc
 :: get back to desktop
 adb shell input keyevent KEYCODE_HOME
 ::get batery info
+echo %TIME% >> Tests\Results\reading\%~1read_time.txt
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\reading\%~1read_after.txt
 adb shell dumpsys batterystats > Tests\Results\reading\%~1read_batterystats.txt
 ::adb bugreport Tests\Results\reading\%~1read_bugreport.zip

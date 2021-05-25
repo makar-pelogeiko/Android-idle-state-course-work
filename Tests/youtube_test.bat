@@ -21,6 +21,7 @@ adb shell input swipe 550 2263 550 300 500
 ::prepare to experiment
 adb shell dumpsys batterystats --reset
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\youtube\%~1youtube_before.txt
+echo %TIME% > Tests\Results\youtube\%~1youtube_time.txt
 :: open html file 
 adb shell "input tap 450 1900 && input tap 300 1716" && timeout 3
 :: open link 
@@ -32,6 +33,7 @@ call:watcherFunc
 :: get back to desktop
 adb shell input keyevent KEYCODE_HOME
 ::get batery info
+echo %TIME% >> Tests\Results\youtube\%~1youtube_time.txt
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\youtube\%~1youtube_after.txt
 adb shell dumpsys batterystats > Tests\Results\youtube\%~1youtube_batterystats.txt
 ::adb bugreport Tests\Results\youtube\%~1youtube_bugreport.zip

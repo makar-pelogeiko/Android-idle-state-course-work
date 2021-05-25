@@ -17,6 +17,7 @@ adb shell input swipe 550 2263 550 300 500
 ::prepare to experiment
 adb shell dumpsys batterystats --reset
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\notes\%~1note_before.txt
+echo %TIME% > Tests\Results\notes\%~1note_time.txt
 :: start Notes app, create new note, tap for printing text 
 adb shell "input tap 171 236" && timeout 1
 adb shell "input tap 1282 2424" && timeout 1
@@ -27,6 +28,7 @@ call:typeFunc
 adb shell "input tap 980 155"^
  " && input keyevent "KEYCODE_BACK""
 ::get batery info
+echo %TIME% >> Tests\Results\notes\%~1note_time.txt
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\notes\%~1note_after.txt
 adb shell dumpsys batterystats > Tests\Results\note\%~1note_batterystats.txt
 ::adb bugreport Tests\Results\notes\%~1note_bugreport.zip

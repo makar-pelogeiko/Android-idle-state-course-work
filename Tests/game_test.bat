@@ -16,7 +16,8 @@ adb shell dumpsys battery unplug
 adb shell input swipe 550 2263 550 300 500
 ::prepare to experiment
 adb shell dumpsys batterystats --reset
-adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\gaming\%~1watch_before.txt
+adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\gaming\%~1game_before.txt
+echo %TIME% > Tests\Results\gaming\%~1game_time.txt
 :: open game to play 
 adb shell "input tap 735 1063"
 :: wait for loading
@@ -26,6 +27,7 @@ call:playerFunc
 :: get back to desktop
 adb shell input keyevent KEYCODE_HOME
 ::get batery info
+echo %TIME% >> Tests\Results\gaming\%~1game_time.txt
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\gaming\%~1game_after.txt
 adb shell dumpsys batterystats > Tests\Results\gaming\%~1game_batterystats.txt
 ::adb bugreport Tests\Results\gaming\%~1game_bugreport.zip

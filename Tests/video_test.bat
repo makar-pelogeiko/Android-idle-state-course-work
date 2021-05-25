@@ -23,6 +23,7 @@ adb shell input swipe 550 2263 550 300 500
 ::prepare to experiment
 adb shell dumpsys batterystats --reset
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\watching\%~1watch_before.txt
+echo %TIME% > Tests\Results\watching\%~1watch_time.txt
 :: open pdf file to read 
 adb shell "input tap 171 1000"
 :: watching is emulated
@@ -30,6 +31,7 @@ call :watcherFunc
 :: get back to desktop
 adb shell input keyevent KEYCODE_HOME
 ::get batery info
+echo %TIME% >> Tests\Results\watching\%~1watch_time.txt
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\watching\%~1watch_after.txt
 adb shell dumpsys batterystats > Tests\Results\watching\%~1watch_batterystats.txt
 ::adb bugreport Tests\Results\watching\%~1watch_bugreport.zip
