@@ -1,5 +1,5 @@
 cd ..
-for /l %%x in (1, 1, 25) do (
+for /l %%x in (1, 1, 4) do (
    echo %%x itteration
    call :testFunc %%x
 )
@@ -14,9 +14,24 @@ adb shell dumpsys battery unplug
 ::adb shell "input keyevent 26"^
 :: " && input swipe 550 2263 550 300 500"
 adb shell input swipe 550 2263 550 300 500
+
+::start power tutor
+adb shell input keyevent KEYCODE_APP_SWITCH
+adb shell input tap 790 1200
+::start/stop profiler
+adb shell input tap 790 1200
+::system Viewer
+adb shell input tap 790 1650
+::start view
+adb shell input tap 1180 320
+:: get home
+adb shell input keyevent KEYCODE_APP_SWITCH
+adb shell input keyevent KEYCODE_HOME 
+   
 ::prepare to experiment
 adb shell dumpsys batterystats --reset
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\notes\%~1note_before.txt
+adb shell sh ./sdcard/Download/Test_Android_IDLE/get_freq_stats > Tests\Results\notes\%~1note_freq_before.txt
 echo %TIME% > Tests\Results\notes\%~1note_time.txt
 :: start Notes app, create new note, tap for printing text 
 adb shell "input tap 171 236" && timeout 1
@@ -30,11 +45,21 @@ adb shell "input tap 980 155"^
 ::get batery info
 echo %TIME% >> Tests\Results\notes\%~1note_time.txt
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\notes\%~1note_after.txt
+adb shell sh ./sdcard/Download/Test_Android_IDLE/get_freq_stats > Tests\Results\notes\%~1note_freq_after.txt
 adb shell dumpsys batterystats > Tests\Results\note\%~1note_batterystats.txt
 ::adb bugreport Tests\Results\notes\%~1note_bugreport.zip
 ::close all aps
 adb shell input keyevent KEYCODE_APP_SWITCH
-adb shell input swipe 760 880 760 0 400
+adb shell input swipe 760 880 760 0 400 && timeout 2
+
+::get info from power tutor
+adb shell input tap 790 1200 && timeout 1
+adb exec-out screencap -p > Tests\Results\notes\%~1note_power.png
+adb shell input keyevent KEYCODE_BACK
+adb shell input tap 790 1200
+adb shell input keyevent KEYCODE_APP_SWITCH
+adb shell input keyevent KEYCODE_HOME
+
 ::switch the screen off
 adb shell "input keyevent "KEYCODE_POWER""
 ::battery continue charging
@@ -45,7 +70,7 @@ goto:eof
  :: <space>lorem ipsum<space>lorem ipsum<>
  ::about 3 min = 30 in loop
  ::about 1 min = 10 in loop
-FOR /L %%i IN (1,1,10) DO adb shell "input tap 760 2441"^
+FOR /L %%i IN (1,1,3) DO adb shell "input tap 760 2441"^
  " && input tap 1330 2050"^
  " && input tap 1242 1800"^
  " && input tap 522 1800"^

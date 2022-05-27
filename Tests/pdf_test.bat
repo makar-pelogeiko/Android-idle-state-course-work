@@ -1,5 +1,5 @@
 cd ..
-for /l %%x in (1, 1, 25) do (
+for /l %%x in (1, 1, 4) do (
    echo %%x itteration
    call :testFunc %%x
 )
@@ -14,9 +14,24 @@ adb shell dumpsys battery unplug
 ::adb shell "input keyevent 26"^
 :: " && input swipe 550 2263 550 300 500"
 adb shell input swipe 550 2263 550 300 500
+
+::start power tutor
+adb shell input keyevent KEYCODE_APP_SWITCH
+adb shell input tap 790 1200
+::start/stop profiler
+adb shell input tap 790 1200
+::system Viewer
+adb shell input tap 790 1650
+::start view
+adb shell input tap 1180 320
+:: get home
+adb shell input keyevent KEYCODE_APP_SWITCH
+adb shell input keyevent KEYCODE_HOME 
+
 ::prepare to experiment
 adb shell dumpsys batterystats --reset
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\reading\%~1read_before.txt
+adb shell sh ./sdcard/Download/Test_Android_IDLE/get_freq_stats > Tests\Results\reading\%~1read_freq_before.txt
 echo %TIME% > Tests\Results\reading\%~1read_time.txt
 :: open pdf file to read 
 adb shell "input tap 670 236" && timeout 4
@@ -27,11 +42,21 @@ adb shell input keyevent KEYCODE_HOME
 ::get batery info
 echo %TIME% >> Tests\Results\reading\%~1read_time.txt
 adb shell sh ./sdcard/Download/Test_Android_IDLE/get_battery_stats > Tests\Results\reading\%~1read_after.txt
+adb shell sh ./sdcard/Download/Test_Android_IDLE/get_freq_stats > Tests\Results\reading\%~1read_freq_after.txt
 adb shell dumpsys batterystats > Tests\Results\reading\%~1read_batterystats.txt
 ::adb bugreport Tests\Results\reading\%~1read_bugreport.zip
 ::close all aps
 adb shell input keyevent KEYCODE_APP_SWITCH
 adb shell input swipe 760 880 760 0 400 && timeout 1 && adb shell input swipe 760 880 760 0 400
+
+::get info from power tutor
+adb shell input tap 790 1200 && timeout 1
+adb exec-out screencap -p > Tests\Results\reading\%~1read_power.png
+adb shell input keyevent KEYCODE_BACK
+adb shell input tap 790 1200
+adb shell input keyevent KEYCODE_APP_SWITCH
+adb shell input keyevent KEYCODE_HOME
+
 ::switch the screen off
 adb shell "input keyevent "KEYCODE_POWER""
 ::battery continue charging
